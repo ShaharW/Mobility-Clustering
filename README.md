@@ -1,0 +1,1 @@
+This is a project about knowledge discovery from mobile data
