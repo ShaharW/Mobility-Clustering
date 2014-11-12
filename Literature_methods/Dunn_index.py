@@ -21,6 +21,7 @@ def intra_cluster_distance(cluster, labels, distanceMat):
                     dist += distanceMat[i][j]
     if dist == 0:
         print ("The cluster has only one element")
+        return 0
     return dist/((size)*(size-1)*0.5)
 
 def inter_cluster_distance(cluster1, cluster2, labels, distanceMat):
