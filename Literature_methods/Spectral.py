@@ -4,7 +4,7 @@ Created on Nov 2, 2014
 @author: user
 '''
 
-def Spectral(dist,k):
+def Spectral(Aff,k):
     '''***************Imports****************'''
     ##################################################################
     import os, sys, inspect, time  # @UnusedImport
@@ -13,13 +13,13 @@ def Spectral(dist,k):
     
     ##################################################################
     
-    '''***************DBSCAN***************'''
+    '''***************Spectral***************'''
     ##################################################################
 
-    print "clustering with Spectral clustering"
+    print "clustering with Spectral clustering, k = " +str(k)
     end = time.time()
     estimator = SpectralClustering(n_clusters=k,affinity='precomputed')
-    labels = estimator.fit_predict(dist)
+    labels = estimator.fit_predict(Aff)
     ##################################################################
     
     end2 = time.time()
