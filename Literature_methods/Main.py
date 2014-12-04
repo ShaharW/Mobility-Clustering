@@ -7,13 +7,13 @@ import os, sys, inspect, time  # @UnusedImport
 sys.path.insert(0, 'C:\Users\user\Anaconda\Lib\site-packages')
 import numpy as np
 from sklearn import metrics
-import DBSCAN
+import Spectral, Connectivity, Dunn_index
 
-#name = '\LCSS_Agglomerative'
+name = '\LCSS_Sunday_Spectral'
 dist_name = '\LCSS_distMat-Sunday.txt'
-data_name = '\Sunday.txt'
-path = 'C:\Users\user\workspace' 
-# if not os.path.exists(path+name):os.makedirs(path+name)
+data_name = '\Sunday-clean.csv'
+path = 'C:\Users\user\workspace\Results' 
+if not os.path.exists(path+name):os.makedirs(path+name)
  
 '''***************Load data***************'''
 ##################################################################
@@ -22,11 +22,10 @@ path ='C:\Users\user\workspace'
 start = time.time()
 print "loading data"
 dist = np.loadtxt(path+'\Results'+dist_name,delimiter = ' ')  # @UndefinedVariable
-data = np.loadtxt(path+data_name,delimiter = ' ')  # @UndefinedVariable
-
+#data = np.loadtxt(path+data_name,delimiter = ',')  # @UndefinedVariable
+Aff = 1-dist
 end = time.time()
 print "load time is %s seconds " %str(int(end-start))
-
 
 #===============================================================================
 # m = data.shape[0]
@@ -47,34 +46,28 @@ print "load time is %s seconds " %str(int(end-start))
 #===============================================================================
 
 
-scores = np.zeros((14,2))
-labels = DBSCAN.DBSCAN(dist)
-np.savetxt(path+'\Results\LCSS_Sunday_DBSCAN.csv', labels,delimiter = ',')  # @UndefinedVariable
+scores = np.zeros((25,4))
+ 
+for k in range(1,26):
+    print "=============================="
+    start = time.time()
+    labels = Spectral.Spectral(Aff,k*2)
+    np.savetxt(path+'\Results\LCSS_Sunday_Spectral\k='+str(k*2)+' clusters.txt', labels)  # @UndefinedVariable
+    model = time.time()
+    print "Model time is %s seconds " %(str(int(model-start)))
+    scores[k-1,0] = k*2
+    Dunn_score = Dunn_index.Dunn(labels,dist)
+    scores[k-1,1] = Dunn_score
+    Dunn_time = time.time()
+    print "Dunn time is %s seconds " %(str(int(Dunn_time-start)))
+    sil_score = metrics.silhouette_score(dist, labels, metric='precomputed')
+    scores[k-1,2] = sil_score
+    Sil_time = time.time()
+    print "Silhouette time is %s seconds " %(str(int(Sil_time-Dunn_time)))
+    Conn_score = Connectivity.Conn(labels, dist)
+    scores[k-1,3] = Conn_score
+    Conn_time = time.time()
+    print "Connectivity time is %s seconds " %(str(int(Conn_time-Sil_time)))
+print scores
+np.savetxt(path+'\Results\LCSS_Sunday_Spectral\\new_Scores.csv', scores)  # @UndefinedVariable
 
-# for k in range(2,16):
-#     labels = Agglomerative.Agglomerative(dist,k)
-#     np.savetxt(path+'\Results\LCSS_Agglomerative\k='+str(k)+' clusters.txt', labels)  # @UndefinedVariable
-#     start = time.time()
-#     Dunn_score = Dunn_index.Dunn(labels,dist)
-#     scores[k-2,1] = Dunn_score
-#     end = time.time()
-#     print "Dunn time for is %s seconds " %(str(int(end-start)))
-#     print "Dunn score - %s" %str(Dunn_score)
-#     sil_score = metrics.silhouette_score(dist, labels, metric='precomputed')
-#     print "Sil score - %s" %str(sil_score)
-#     scores[k-2,0] = sil_score
-# 
-# print scores
-# np.savetxt(path+'\Results\LCSS_Agglomerative_scores.txt', scores)  # @UndefinedVariable
-#===============================================================================
-# Dunn = []
-# for k in range(2,16):
-#     start = time.time()
-#     labels = np.loadtxt(path+'\Results'+name+"\k="+str(k)+"-means.txt",delimiter = ',')
-#     Dunn_score = Dunn_index.Dunn(labels,dist)
-#     Dunn.append(Dunn_score)
-#     end = time.time()
-#     print "Dunn time for %s-means is %s seconds " %(str(k), str(int(end-start)))
-#===============================================================================
-
-  
