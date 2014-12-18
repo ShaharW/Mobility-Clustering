@@ -34,7 +34,7 @@ def Kmedoids(distances, k=3):
     sorted_medoids = sorted(list(curr_medoids))
 
     ret_clusters = list(sorted_medoids.index(clust) for clust in clusters)
-    return ret_clusters, curr_medoids
+    return ret_clusters
 
 def assign_points_to_clusters(medoids, distances):
     distances_to_medoids = distances[:,medoids]
