@@ -1,7 +1,7 @@
 '''
 Created on Sep 9, 2014
 
-@author: user
+@author: Shahar Weinstock
 '''
 #
 def lcs(a, b):
