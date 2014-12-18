@@ -1,7 +1,7 @@
 '''
 Created on Dec 7, 2014
 
-@author: user
+@author: Shahar Weinstock
 '''
 import os, sys, inspect, time  # @UnusedImport
 sys.path.insert(0, 'C:\Users\user\Anaconda\Lib\site-packages')
@@ -14,4 +14,4 @@ def HMM_distMat(models):
         for index_b,mat_b in enumerate(models):
             distMat[index_a,index_b] = sum(stats.entropy(mat_a[i,:],mat_b[i,:]) for i in range(mat_a.shape[0]))
     distMat = distMat/distMat.max()
-    np.savetxt('C:\Users\user\workspace\Results\\3HMM_distMat.txt', distMat)
+    return distMat
