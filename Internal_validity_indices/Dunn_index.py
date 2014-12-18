@@ -1,7 +1,7 @@
 '''
 Created on Oct 30, 2014
 
-@author: user
+@author: Shahar Weinstock
 '''
 
 def cluster_size(cluster,labels):
