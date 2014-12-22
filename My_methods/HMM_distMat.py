@@ -2,6 +2,11 @@
 Created on Dec 7, 2014
 
 @author: Shahar Weinstock
+
+Calculating the normalized KL distance between each pair of Markov models.
+First, the KL measure between each row is being summed to a total distance between the models.
+Second, the distances are being normalized to 0-1 range by dividing with the max distance.
+
 '''
 import os, sys, inspect, time  # @UnusedImport
 sys.path.insert(0, 'C:\Users\user\Anaconda\Lib\site-packages')
