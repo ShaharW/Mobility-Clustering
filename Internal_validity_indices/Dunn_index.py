@@ -31,7 +31,11 @@ def inter_cluster_distance(cluster1, cluster2, labels, distanceMat):
             for j in range(len(labels)):
                 if labels[j] == cluster2:
                     dist += distanceMat[i][j]
-    return dist/(cluster_size(cluster1,labels)*cluster_size(cluster2,labels))   
+    size1 = cluster_size(cluster1,labels)
+    size2 = cluster_size(cluster2,labels)
+    if size1 == 0 or size2 == 0:
+        return float('Inf')
+    return dist/(size1*size2)   
 
 def min_inter_distance(k,labels,distanceMat):
     inter_distances = []
