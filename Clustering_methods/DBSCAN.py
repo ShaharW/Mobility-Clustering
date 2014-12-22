@@ -4,7 +4,7 @@ Created on Oct 30, 2014
 @author: user
 '''
 
-def DBSCAN(dist,epsilon):
+def DBSCAN(dist,epsilon=0.5):
     '''***************Imports****************'''
     ##################################################################
     import os, sys, inspect, time  # @UnusedImport
