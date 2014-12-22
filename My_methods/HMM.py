@@ -2,6 +2,10 @@
 Created on Dec 7, 2014
 
 @author: Shahar Weinstock
+
+Calculating Markov models for sequence data.
+Each row is being added with an a-priory constant distribution
+(every element in each row is added 1/row_len and being normalized) 
 '''
 import numpy as np
 
