@@ -25,4 +25,4 @@ def DBSCAN(dist,epsilon=0.5):
     end2 = time.time()
     print "model time is %s seconds " %str(int(end2-end))
     print "%s clusters found" %str(len(set(labels)))
-    return labels + 1
+    return len(set(labels)), labels + 1 # return # of clusters and labels
