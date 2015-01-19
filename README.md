@@ -1,4 +1,4 @@
-## Clustering similar users by mobility behavior
+# Clustering similar users by mobility behavior
 
 This is a project about knowledge discovery from mobile data.
 
