@@ -12,29 +12,37 @@ from scipy import stats
 ''' This is the main function that measures the average entropy '''
 def evaluation(data,labels,seq_size=2):
     entropy = 0.0
-    clusters = max(labels)+1
+    ''' total entropy '''
+    x_labels = np.zeros(len(labels))
+    clus = cluster(0,x_labels,data,seq_size)
+    entropy = clus.prop*clus.entropy
+    print "entropy before clustering is - " + str(entropy)
+    
+    ''' entropy after clustering '''
+    entropy = 0.0
+    clusters = int(max(labels)+1)
     for i in range(clusters):
         clus = cluster(i,labels,data,seq_size)
         entropy += clus.prop*clus.entropy
     return entropy
         
-        
+
 ''' Cluster class '''        
 class cluster:
     def __init__(self,number,labels,data,seq_size):
         self.number = number
         self.old_seq_len = data.shape[1]
-        self.size = self.get_cluster_size()
+        self.size = self.get_cluster_size(labels)
         self.prop = self.size/(len(labels)*1.0)
-        self.instances = self.get_cluster_data()
+        self.instances = self.get_cluster_data(data,labels)
         self.code = self.instances_to_code(seq_size)
         self.entropy = self.calc_entropy()
         
-    def get_cluster_size(self):
+    def get_cluster_size(self,labels):
         k = len(set(labels))
         return np.histogram(labels,bins=np.arange(k+1))[0][self.number]
 
-    def get_cluster_data(self):
+    def get_cluster_data(self,data,labels):
         m = data.shape[0]
         j = 0
         cluster_data = np.zeros((self.size,self.old_seq_len))
@@ -63,8 +71,3 @@ class cluster:
         k = max(set(self.code))
         hist = np.histogram(self.code,bins = np.arange(k+1))[0]
         return stats.entropy(hist,base=2)
-            
-
-data = np.matrix([[2,6,3,4,1,3,6,2],[0,4,0,7,0,1,0,2],[2,6,3,4,1,3,6,2],[2,6,3,4,1,3,6,2],[2,6,3,4,1,3,6,3]])
-labels = [1,0,1,1,1]
-print evaluation(data, labels, 2)
