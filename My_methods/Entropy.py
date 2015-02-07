@@ -41,7 +41,7 @@ class cluster:
         self.entropy = self.calc_entropy()
         
     def get_cluster_size(self,labels):
-        k = len(set(labels))
+        k = max(set(labels))
         return np.histogram(labels,bins=np.arange(k+1))[0][self.number]
 
     def get_cluster_data(self,data,labels):
