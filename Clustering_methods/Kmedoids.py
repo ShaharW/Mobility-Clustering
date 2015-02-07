@@ -8,7 +8,7 @@ Created on Nov 22, 2014
 import numpy as np
 import random
 
-def Kmedoids(distances, k=3):
+def Kmedoids(dist, k=3):
 
     m = distances.shape[0] # number of points
     # Pick k random medoids.
