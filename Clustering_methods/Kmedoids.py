@@ -10,7 +10,7 @@ import random
 
 def Kmedoids(dist, k=3):
 
-    m = distances.shape[0] # number of points
+    m = dist.shape[0] # number of points
     # Pick k random medoids.
     curr_medoids = np.array([-1]*k)
     while not len(np.unique(curr_medoids)) == k:
@@ -21,12 +21,12 @@ def Kmedoids(dist, k=3):
     # Until the medoids stop updating, do the following:
     while not ((old_medoids == curr_medoids).all()):
         # Assign each point to cluster with closest medoid.
-        clusters = assign_points_to_clusters(curr_medoids, distances)
+        clusters = assign_points_to_clusters(curr_medoids, dist)
 
         # Update cluster medoids to be lowest cost point. 
         for curr_medoid in curr_medoids:
             cluster = np.where(clusters == curr_medoid)[0]
-            new_medoids[curr_medoids == curr_medoid] = compute_new_medoid(cluster, distances)
+            new_medoids[curr_medoids == curr_medoid] = compute_new_medoid(cluster, dist)
 
         old_medoids[:] = curr_medoids[:]
         curr_medoids[:] = new_medoids[:]
@@ -36,13 +36,13 @@ def Kmedoids(dist, k=3):
     ret_clusters = list(sorted_medoids.index(clust) for clust in clusters)
     return ret_clusters
 
-def assign_points_to_clusters(medoids, distances):
-    distances_to_medoids = distances[:,medoids]
-    return medoids[np.argmin(distances_to_medoids, axis=1)]
+def assign_points_to_clusters(medoids, dist):
+    dist_to_medoids = dist[:,medoids]
+    return medoids[np.argmin(dist_to_medoids, axis=1)]
 
-def compute_new_medoid(cluster, distances):
-    mask = np.ones(distances.shape)
+def compute_new_medoid(cluster, dist):
+    mask = np.ones(dist.shape)
     mask[np.ix_(cluster,cluster)] = 0.
-    cluster_distances = np.ma.masked_array(data=distances, mask=mask, fill_value=10e9)
-    costs = cluster_distances.sum(axis=1)
+    cluster_dist = np.ma.masked_array(data=dist, mask=mask, fill_value=10e9)
+    costs = cluster_dist.sum(axis=1)
     return costs.argmin(axis=0, fill_value=10e9)
