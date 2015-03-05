@@ -4,7 +4,7 @@ Created on Oct 30, 2014
 @author: user
 '''
 
-def DBSCAN(dist,epsilon=0.5):
+def DBSCAN(dist,epsilon=0.5,min_samp = 10):
     '''***************Imports****************'''
     ##################################################################
     import os, sys, inspect, time  # @UnusedImport
@@ -18,7 +18,7 @@ def DBSCAN(dist,epsilon=0.5):
 
     print "clustering with DBSCAN"
     end = time.time()
-    estimator = DBSCAN(eps=epsilon, min_samples=10, metric='precomputed')
+    estimator = DBSCAN(eps=epsilon, min_samples=min_samp, metric='precomputed')
     labels = estimator.fit_predict(dist)
     ##################################################################
     
