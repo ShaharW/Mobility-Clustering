@@ -1,9 +1,11 @@
-# Clustering similar users by mobility behavior
+# Clustering similar users by mobility behaviour
 
-This is a project about knowledge discovery from mobile data.
-
-Using innovative methods in order to cluster mobile phone users based on their location history.
-The use of semantic location, rather than geographical location, makes it possible to identify similar users based on their lifestyle. 
+The research objective is to cluster users based on a probabilistic profiling that will represent complex mobility behavior.
+One way to do so is to profile the individual's behavior by a Markovian models.
+With this model we are able to capture the relationship between different time intervals in the user’s trajectory.
+When using a probabilistic profiling, the distance between two users is evaluated as a distance between two distributions.
+We used measures from the field of information theory, such as the Kullback-Leibler divergence, applied various clustering methods (K-medoids, Hierarchical clustering, Spectral clustering and DBSCAN) and used internal validation indices in order to find the most suitable clustering to various applications.
+The used data is real and based on unique dataset.
 
 ### Folders:
 
