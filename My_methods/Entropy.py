@@ -11,16 +11,6 @@ from scipy import stats
 
 ''' This is the main function that measures the average entropy '''
 def evaluation(data,labels,seq_size=2):
-    #===========================================================================
-    # ''' total entropy '''
-    # entropy = 0.0
-    # x_labels = np.zeros(len(labels))
-    # clus = cluster(0,x_labels,data,seq_size)
-    # entropy = clus.prop*clus.entropy
-    # print "entropy before clustering is - " + str(entropy)
-    #===========================================================================
-    
-    ''' entropy after clustering '''
     entropy = 0.0
     clusters = int(max(labels)+1)
     for i in range(clusters):
@@ -28,7 +18,6 @@ def evaluation(data,labels,seq_size=2):
         entropy += clus.prop*clus.entropy
     return entropy
         
-
 ''' Cluster class '''        
 class cluster:
     def __init__(self,number,labels,data,seq_size):
@@ -41,10 +30,12 @@ class cluster:
         self.entropy = self.calc_entropy()
         
     def get_cluster_size(self,labels):
-        k = max(set(labels))
+        k = int(max(labels)+1)
         return np.histogram(labels,bins=np.arange(k+1))[0][self.number]
 
     def get_cluster_data(self,data,labels):
+        if self.size == 0:
+            return None
         m = data.shape[0]
         j = 0
         cluster_data = np.zeros((self.size,self.old_seq_len))
