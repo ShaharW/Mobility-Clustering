@@ -14,6 +14,7 @@ from scipy import stats
 import numpy as np
 start = time.time()
 
+print stats.entropy([2,0,1],[0,0.3,0.1])
 def MM_distMat(models):
     distMat = np.zeros((models.shape[0],models.shape[0]))
     nrow = models[0].shape[0]
