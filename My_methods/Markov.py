@@ -24,9 +24,7 @@ def MM(data,order=1):
             matrix[row,data[i,j+order]] += 1
         for k in xrange(elements**order):
             matrix[k,elements] = sum(matrix[k,0:elements]) # sum every row to the last column
-            if matrix[k,elements] == 0:
-                matrix[k,0:elements] = [1.0/elements] * elements
-            else:
+            if matrix[k,elements] > 0:
                 matrix[k,0:elements] = matrix[k,0:elements]/matrix[k,elements] # normalize each row with 0.01 a-priory
         matrix[:,elements] = matrix[:,elements]/sum(matrix[:,elements])
         models.append(matrix) 
