@@ -17,7 +17,7 @@ def MM(data,order=1):
     elements = int(max(np.unique(data))+1)
     models = []
     for i in xrange(m):
-        print i
+        #print i
         matrix = np.zeros((elements**order,elements+1))
         for j in xrange(n-order):
             row = sum(data[i,k]*elements**(j+order-k-1) for k in range(j,j+order))
