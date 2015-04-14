@@ -14,10 +14,11 @@ def LCSS_distMat(data):
     width *= 1.0
     dist = np.zeros((length,length))
     for i in xrange(length):
+        #print "instance - " + str(i)
         for j in xrange(i+1):
             dist[i,j] = 1-LCSS.lcs(data[i,:],data[j,:])/width
             dist[j,i] = dist[i,j]
     dist = dist/dist.max() # normalize
     end = time.time()
-    print "calculation time is %s seconds " %str(int(end-start))
+    #print "calculation time is %s seconds " %str(int(end-start))
     return dist
