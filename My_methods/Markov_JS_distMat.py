@@ -12,9 +12,10 @@ import os, sys, inspect, time  # @UnusedImport
 sys.path.insert(0, 'C:\Users\user\Anaconda\Lib\site-packages')
 from scipy import stats
 import numpy as np
-start = time.time()
+
 
 def MM_distMat(models):
+    start = time.time()
     distMat = np.zeros((models.shape[0],models.shape[0]))
     nrow = models[0].shape[0]
     ncol = models[0].shape[1] - 1 # the last column is for marginal distribution
@@ -34,6 +35,6 @@ def MM_distMat(models):
                       
             distMat[index_a,index_b] = 0.5*(Dist_a_M + Dist_b_M) # according to j-s
             distMat[index_b,index_a] = distMat[index_a,index_b] # symmetric
-        print "calculated " + str(int((index_a*(index_a+1))*100/(models.shape[0]*(models.shape[0]+1)))) + "% in " + str(int((time.time()-start)/60)) + " minutes"
+        #print "calculated " + str(int((index_a*(index_a+1))*100/(models.shape[0]*(models.shape[0]+1)))) + "% in " + str(int((time.time()-start)/60)) + " minutes"
     distMat = distMat/distMat.max()
     return distMat
