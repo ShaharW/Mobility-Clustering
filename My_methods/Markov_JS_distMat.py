@@ -15,6 +15,7 @@ import numpy as np
 
 
 def MM_distMat(models):
+    print "Calculating JS_distMat"
     start = time.time()
     distMat = np.zeros((models.shape[0],models.shape[0]))
     nrow = models[0].shape[0]
@@ -37,4 +38,6 @@ def MM_distMat(models):
             distMat[index_b,index_a] = distMat[index_a,index_b] # symmetric
         #print "calculated " + str(int((index_a*(index_a+1))*100/(models.shape[0]*(models.shape[0]+1)))) + "% in " + str(int((time.time()-start)/60)) + " minutes"
     distMat = distMat/distMat.max()
+    print "JS_distMat calculation time is %s minutes " %str(int(time.time()-start)/60)
+    #print "normalization OFF"
     return distMat
