@@ -19,6 +19,7 @@ def LCSS_distMat(data):
             dist[i,j] = 1-LCSS.lcs(data[i,:],data[j,:])/width
             dist[j,i] = dist[i,j]
     dist = dist/dist.max() # normalize
+    #print "normalization OFF"
     end = time.time()
     #print "calculation time is %s seconds " %str(int(end-start))
     return dist
