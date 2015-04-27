@@ -10,8 +10,12 @@ every element in each row is 1/(size of the row)
 The last column is saved for marginal probability of the rows
 '''
 import numpy as np
+import time
+
 
 def MM(data,order=1):
+    print "Calculating Markov models"
+    start = time.time()
     m = data.shape[0]
     n = data.shape[1]
     elements = int(max(np.unique(data))+1)
@@ -27,5 +31,6 @@ def MM(data,order=1):
             if matrix[k,elements] > 0:
                 matrix[k,0:elements] = matrix[k,0:elements]/matrix[k,elements] # normalize each row with 0.01 a-priory
         matrix[:,elements] = matrix[:,elements]/sum(matrix[:,elements])
-        models.append(matrix) 
+        models.append(matrix)
+    print "Markov models calculation time is %s minutes " %str(int(time.time()-start)/60) 
     return models
