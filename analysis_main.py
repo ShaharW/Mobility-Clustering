@@ -18,11 +18,11 @@ from scipy import stats
 '''************Initializeing Parameters**************'''
 #name = '\\PCA'
 #name = '\\EM'
-name = '\\1MM'
-#name = '\\LCSS'
+#name = '\\1MM'
+name = '\\LCSS'
 #name = '\\Data'
 #dist_name = '\\1MM_JS_distMat.txt'
-dist_name = '\LCSS_distMat.txt'
+#dist_name = '\LCSS_distMat.txt'
 #models_name = '\models_new.npy'
 data_name = '\weekdays.csv'
 #labels_name = '\Results\labels'
@@ -30,13 +30,13 @@ path = 'C:\Users\User\workspace\Results\Analysis'
 #if not os.path.exists(path+name):os.makedirs(path+name)
  
 ##################################################################
-factor = 0.0
+factor = 1
 iterations = 1
-analysis_type = 'time'
+analysis_type = 'length'
 
 '''***************Load data***************'''
 #data = np.loadtxt(path+data_name,delimiter = ',')  # @UndefinedVariable
-#data = np.loadtxt(path+'\\Data\\factor = '+str(factor)+','+analysis_type+','+'data.csv', delimiter=",")
+data = np.loadtxt(path+'\\Data\\factor = '+str(factor)+','+analysis_type+','+'data.csv', delimiter=",")
 #===============================================================================
 # cnt = 0
 # print str(cnt),
@@ -62,26 +62,28 @@ for iter in range(iterations):
     #         data[i,np.random.random_integers(0, data.shape[1]-1)] = indel
     #===========================================================================
 
-    ''' Indel '''
+    ''' Length '''
     #===========================================================================
-    # analysis_type  = "indel-replace"
-    # factor = 0.07+iter*0.07
     # print analysis_type+", factor = "+str(factor)+", iteration = "+str(iter+1)
     # s = data.shape[1] #hours in week
-    # t = 5             #days in week
+    # #t = 5             #days in week
     # for i in range(data.shape[0]):
+    #     print i
     #     if np.random.rand() < factor:
-    #         interval = np.random.random_integers(1, 3)
-    #         cut_location = np.random.random_integers(0,s/t-1-interval)
-    #         paste_location = np.random.random_integers(0,s/t-1-interval)
-    #         while np.abs(cut_location-paste_location)<interval:
-    #             paste_location = np.random.random_integers(0,s/t-1-interval)
-    #         for j in range(t):
-    #             temp = deepcopy(data[i,j*(s/t)+cut_location:j*(s/t)+cut_location+interval])
-    #             data[i,j*(s/t)+cut_location:j*(s/t)+cut_location+interval] = data[i,j*(s/t)+paste_location:j*(s/t)+paste_location+interval]
-    #             data[i,j*(s/t)+paste_location:j*(s/t)+paste_location+interval] = temp
+    #         counter = 0
+    #         again = True
+    #         while again == True:
+    #             loc = np.random.random_integers(0,s-5)
+    #             if data[i,loc] != data[i,loc+1] and data[i,loc+1] == data[i,loc+2] and data[i,loc+2] == data[i,loc+3]:
+    #                 again = False
+    #                 data[i,loc+1:loc+2] = data[i,loc] 
+    #             elif counter > 100000:
+    #                 again = False
+    #             else:
+    #                 counter += 1
+    # np.savetxt(path+name+'\\factor = '+str(factor)+','+analysis_type+','+'data.csv', data, delimiter=",")
     #===========================================================================
-     
+                    
     ''' moving in time '''
     #===========================================================================
     # analysis_type  = "time"
@@ -99,47 +101,41 @@ for iter in range(iterations):
     #             data[i,interval:] = data[i,0:data.shape[1]-interval]
     #             data[i,0:interval] = temp
     # np.savetxt(path+name+'\\factor = '+str(factor)+','+analysis_type+','+'data.csv', data, delimiter=",")
+    #   
     #===========================================================================
-      
-                
+                 
     ''' LCSS distMat '''
     if name == '\\LCSS':
-        dist = np.loadtxt(path+name+'\\distMat\\factor = '+str(factor)+','+analysis_type+','+'distMat.txt',delimiter = " ")
-        #=======================================================================
-        # dist = LCSS_distMat.LCSS_distMat(data)
-        # np.savetxt(path+name+'\\distMat\\factor = '+str(factor)+','+analysis_type+','+'distMat.txt', dist, delimiter=" ")
-        #=======================================================================
-        
+        #dist = np.loadtxt(path+name+'\\distMat\\factor = '+str(factor)+','+analysis_type+','+'distMat.txt',delimiter = " ")
+        dist = LCSS_distMat.LCSS_distMat(data)
+        np.savetxt(path+name+'\\distMat\\factor = '+str(factor)+','+analysis_type+','+'distMat.txt', dist, delimiter=" ")
+         
     ''' Markov distMat '''
     if name == '\\1MM':
-        dist = np.loadtxt(path+name+'\\distMat\\factor = '+str(factor)+','+analysis_type+','+'distMat.txt',delimiter = " ")
-        #=======================================================================
-        # models = Markov.MM(data, 1)
-        # models = np.array(models)
-        # dist = Markov_JS_distMat.MM_distMat(models)
-        # np.savetxt(path+name+'\\distMat\\factor = '+str(factor)+','+analysis_type+','+'distMat.txt', dist, delimiter=" ")
-        #=======================================================================
-        
+        #dist = np.loadtxt(path+name+'\\distMat\\factor = '+str(factor)+','+analysis_type+','+'distMat.txt',delimiter = " ")
+        models = Markov.MM(data, 1)
+        models = np.array(models)
+        dist = Markov_JS_distMat.MM_distMat(models)
+        np.savetxt(path+name+'\\distMat\\factor = '+str(factor)+','+analysis_type+','+'distMat.txt', dist, delimiter=" ")
+         
     ''' PCA distMat '''
     if name == '\\PCA':
-        dist = np.loadtxt(path+name+'\\distMat\\factor = '+str(factor)+','+analysis_type+','+'distMat.txt',delimiter = " ")
-        #=======================================================================
-        # pca_data = np.zeros((data.shape[0],data.shape[1]*7))
-        # for i in range(data.shape[0]):
-        #     for j in range(data.shape[1]):
-        #         pca_data[i,data[i,j]*23+j] = 1
-        # pca = PCA(n_components=7)
-        # new_data = pca.fit_transform(pca_data)
-        # dist = Euclidean_distMat.distMat(new_data)
-        # np.savetxt(path+name+'\\factor = '+str(factor)+','+analysis_type+','+'distMat.txt', dist, delimiter=" ")
-        #=======================================================================
-        
+        #dist = np.loadtxt(path+name+'\\distMat\\factor = '+str(factor)+','+analysis_type+','+'distMat.txt',delimiter = " ")
+        pca_data = np.zeros((data.shape[0],data.shape[1]*7))
+        for i in range(data.shape[0]):
+            for j in range(data.shape[1]):
+                pca_data[i,data[i,j]*23+j] = 1
+        pca = PCA(n_components=7)
+        new_data = pca.fit_transform(pca_data)
+        dist = Euclidean_distMat.distMat(new_data)
+        np.savetxt(path+name+'\\distMat\\factor = '+str(factor)+','+analysis_type+','+'distMat.txt', dist, delimiter=" ")
+         
     ''' Clustering '''
     true_labels = np.loadtxt(path+ name+"\\k=30 clusters.txt")
-   
+     
     base_scores = np.loadtxt(path+name+"\\base_scores.csv",delimiter = ',')
     scores = np.zeros([50,2])
-      
+        
     for i in range(50):
         print 'clustering iteration - '+str(i)
         k=30
@@ -148,7 +144,7 @@ for iter in range(iterations):
         else:
             labels = Kmedoids.Kmedoids(dist, k)
             #np.savetxt(path+name+'\\k='+str(i)+' clusters.txt', labels,delimiter=" ")
-  
+    
         scores[i,0] = metrics.v_measure_score(true_labels, labels)
         scores[i,1] = metrics.adjusted_rand_score(true_labels, labels)
         #print scores[i,:]
@@ -157,12 +153,11 @@ for iter in range(iterations):
     # print stats.mstats.normaltest(scores[:,1])[1]
     # print stats.mstats.normaltest(scores[:,2])[1]
     #=======================================================================
-    np.savetxt(path+name+'\\base_scores.csv', scores,fmt='%.50f', delimiter=",")
-  
+    #np.savetxt(path+name+'\\base_scores.csv', scores,fmt='%.50f', delimiter=",")
+    
     ret[0] = stats.ttest_ind(base_scores[:,0],scores[:,0], equal_var = False)[1]
     ret[1] = stats.ttest_ind(base_scores[:,1],scores[:,1], equal_var = False)[1]
     np.savetxt(path+name+'\\factor = '+str(factor)+','+analysis_type+'.csv', ret.reshape((1,2)),fmt='%.50f', delimiter=",")
-
 
   
 ''' Create data for analysis '''
