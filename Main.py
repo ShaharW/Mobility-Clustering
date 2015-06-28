@@ -15,63 +15,33 @@ from sklearn.decomposition import PCA
 from Literature_methods import Euclidean_distMat
 
 '''************Initializeing Parameters**************'''
-name = '\Spectral'
+name = '\\1MM'
 #name = '\EM'
 #name = '\PCA'
 #name = '\\LCSS'
-#dist_name = '\\1MM_JS_distMat_noOnes.txt'
+dist_name = '\\1MM_JS_distMat-new.txt'
 #dist_name = '\LCSS_distMat_noOnes.txt'
 #models_name = '\models.npy'
 data_name = '\weekdays.csv'
 #labels_name = '\LCSS'
 path = 'C:\Users\User\workspace\Results\Weekdays' 
-#if not os.path.exists(path+name):os.makedirs(path+name)
+if not os.path.exists(path+name):os.makedirs(path+name)
  
 '''***************Load data***************'''
 ##################################################################
 start = time.time()
 print "loading data"
-#dist = np.loadtxt(path+name+dist_name,delimiter = ' ')  # @UndefinedVariable
+dist = np.loadtxt(path+name+dist_name,delimiter = ' ')  # @UndefinedVariable
 #Aff = np.loadtxt(path+name+"\Aff.txt",delimiter = ' ') 
-data = np.loadtxt(path+data_name,delimiter = ',')  # @UndefinedVariable
+#data = np.loadtxt(path+data_name,delimiter = ',')  # @UndefinedVariable
 #models = np.load(path+name+models_name)  # @UndefinedVariable
-#Aff = np.exp(-2 * dist / dist.std())
+Aff = np.exp(-2 * dist / dist.std())
 #Aff = 1-dist
-dist = np.loadtxt('C:\Users\User\workspace\Results\Weekdays\Hamming.txt',delimiter = ' ')  # @UndefinedVariable
+#dist = np.loadtxt('C:\Users\User\workspace\Results\Weekdays\Hamming.txt',delimiter = ' ')  # @UndefinedVariable
 #Aff = np.exp(-2 * dist / dist.std())
 end = time.time()
 print "load time is %s seconds " %str(int(end-start))
 
-
-
-''' Clustering '''
-#===============================================================================
-# scores = np.zeros((99,4))
-#                      
-# for k in range(2,101):
-#     print "=============================="
-#     print "K = " + str(k)
-#     start = time.time()
-#     labels = np.loadtxt(path+'\Labels'+name+'\k='+str(k)+' clusters.txt',delimiter = ',') 
-#     model = time.time()
-#     print "Model time is %s seconds " %(str(int(model-start)))
-#     scores[k-2,0] = k
-#     Dunn_score = Dunn_index.Dunn(labels,dist)
-#     scores[k-2,1] = Dunn_score
-#     Dunn_time = time.time()
-#     print "Dunn time is %s seconds " %(str(int(Dunn_time-start)))
-#     sil_score = metrics.silhouette_score(dist, np.asarray(labels), metric='precomputed')
-#     scores[k-2,2] = sil_score
-#     Sil_time = time.time() 
-#     print "Silhouette time is %s seconds " %(str(int(Sil_time-Dunn_time)))
-#     Conn_score = Connectivity.Conn(labels, dist)
-#     scores[k-2,3] = Conn_score
-#     Conn_time = time.time()
-#     print "Connectivity time is %s seconds " %(str(int(Conn_time-Sil_time)))
-#     Conn_time = time.time()
-# print scores
-# np.savetxt(path+'\Scores'+name+'.csv', scores, fmt='%.3f', delimiter=',')  # @UndefinedVariable
-#===============================================================================
 
 ''' Create data for PCA '''
 #===============================================================================
@@ -91,14 +61,14 @@ print "load time is %s seconds " %str(int(end-start))
 
 ''' Markov models '''
 #===============================================================================
-# models = Markov.MM(data, 1)
+# models = Markov.MM(data, 3)
 # np.save(path+name+'\models', models)  # @UndefinedVariable
 #===============================================================================
 
 ''' Markov distMat '''
 #===============================================================================
 # dist = Markov_JS_distMat.MM_distMat(models)
-# np.savetxt(path+name+'\\1MM_JS_distMat.txt', dist, delimiter=" ")  # @UndefinedVariable
+# np.savetxt(path+name+'\\3MM_JS_distMat-new.txt', dist, delimiter=" ")  # @UndefinedVariable
 #===============================================================================
 
 ''' evaluate clustering '''
@@ -212,41 +182,44 @@ print "load time is %s seconds " %str(int(end-start))
 # # plt.show()
 # # np.savetxt(path+name+'\explained variance ratio.csv', pca.explained_variance_ratio_, fmt='%.3f', delimiter=',')  # @UndefinedVariable  
 # #===============================================================================
-scores = np.zeros((99,4))
+#scores = np.zeros((99,4))
            
 ''' clustering '''
 for k in range(2,101):
     print "=============================="
     print "K = " + str(k)
     start = time.time()
-    labels = np.loadtxt(path+'\PCA\Labels'+name+'\k='+str(k)+' clusters.txt',delimiter = ',') 
+    #labels = np.loadtxt(path+name+'\Labels\k='+str(k)+' clusters.txt',delimiter = ',') 
+    labels = Kmedoids.Kmedoids(dist, k)
+    np.savetxt(path+name+'\Labels\Kmedoids\k='+str(k)+' clusters.txt', labels,fmt='%i', delimiter=" ")
     model = time.time()
     print "Model time is %s seconds " %(str(int(model-start)))
-    scores[k-2,0] = k
-    Dunn_score = Dunn_index.Dunn(labels,dist)
-    print Dunn_score
-    scores[k-2,1] = Dunn_score
-    Dunn_time = time.time()
-    print "Dunn time is %s seconds " %(str(int(Dunn_time-start)))
-    sil_score = metrics.silhouette_score(dist, np.asarray(labels), metric='precomputed')
-    scores[k-2,2] = sil_score
-    Sil_time = time.time() 
-    print "Silhouette time is %s seconds " %(str(int(Sil_time-Dunn_time)))
-    Conn_score = Connectivity.Conn(labels, dist)
-    scores[k-2,3] = Conn_score
-    Conn_time = time.time()
-    print "Connectivity time is %s seconds " %(str(int(Conn_time-Sil_time)))
-    Conn_time = time.time()
-    #===========================================================================
-    # scores[k-2,0] = k
-    # scores[k-2,1] = Entropy.evaluation(data, labels, 1)
-    # scores[k-2,2] = Entropy.evaluation(data, labels, 2)
-    # scores[k-2,3] = Entropy.evaluation(data, labels, 3)
-    # scores[k-2,4] = Entropy.evaluation(data, labels, 4)
-    # scores[k-2,5] = Entropy.evaluation(data, labels, 5)
-    # scores[k-2,6] = Entropy.evaluation(data, labels, 6)
-    # Ent_time = time.time()
-    # print "Entropy time is %s seconds " %(str(int(Ent_time-model)))
-    #===========================================================================
-print scores
-np.savetxt(path+name+' Scores.csv', scores, fmt='%.3f', delimiter=',')  # @UndefinedVariable'''
+#===============================================================================
+#     scores[k-2,0] = k
+#     Dunn_score = Dunn_index.Dunn(labels,dist)
+#     scores[k-2,1] = Dunn_score
+#     Dunn_time = time.time()
+#     print "Dunn time is %s seconds " %(str(int(Dunn_time-start)))
+#     sil_score = metrics.silhouette_score(dist, np.asarray(labels), metric='precomputed')
+#     scores[k-2,2] = sil_score
+#     Sil_time = time.time() 
+#     print "Silhouette time is %s seconds " %(str(int(Sil_time-Dunn_time)))
+#     Conn_score = Connectivity.Conn(labels, dist)
+#     scores[k-2,3] = Conn_score
+#     Conn_time = time.time()
+#     print "Connectivity time is %s seconds " %(str(int(Conn_time-Sil_time)))
+#     Conn_time = time.time()
+#     #===========================================================================
+#     # scores[k-2,0] = k
+#     # scores[k-2,1] = Entropy.evaluation(data, labels, 1)
+#     # scores[k-2,2] = Entropy.evaluation(data, labels, 2)
+#     # scores[k-2,3] = Entropy.evaluation(data, labels, 3)
+#     # scores[k-2,4] = Entropy.evaluation(data, labels, 4)
+#     # scores[k-2,5] = Entropy.evaluation(data, labels, 5)
+#     # scores[k-2,6] = Entropy.evaluation(data, labels, 6)
+#     # Ent_time = time.time()
+#     # print "Entropy time is %s seconds " %(str(int(Ent_time-model)))
+#     #===========================================================================
+# print scores
+# np.savetxt(path+name+'\Scores.csv', scores, fmt='%.3f', delimiter=',')  # @UndefinedVariable'''
+#===============================================================================
