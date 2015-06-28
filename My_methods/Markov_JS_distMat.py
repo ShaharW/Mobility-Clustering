@@ -34,9 +34,9 @@ def MM_distMat(models):
             Dist_a_M += stats.entropy(mat_a[:,ncol],M[:,ncol]) # conditioning KL
             Dist_b_M += stats.entropy(mat_b[:,ncol],M[:,ncol]) # conditioning KL
                       
-            distMat[index_a,index_b] = 0.5*(Dist_a_M + Dist_b_M) # according to j-s
+            distMat[index_a,index_b] = np.sqrt(0.5*(Dist_a_M + Dist_b_M)) # according to j-s
             distMat[index_b,index_a] = distMat[index_a,index_b] # symmetric
-        #print "calculated " + str(int((index_a*(index_a+1))*100/(models.shape[0]*(models.shape[0]+1)))) + "% in " + str(int((time.time()-start)/60)) + " minutes"
+        print "calculated " + str(int((index_a*(index_a+1))*100/(models.shape[0]*(models.shape[0]+1)))) + "% in " + str(int((time.time()-start)/60)) + " minutes"
     distMat = distMat/distMat.max()
     print "JS_distMat calculation time is %s minutes " %str(int(time.time()-start)/60)
     #print "normalization OFF"
